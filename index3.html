@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Blur to Dance: an Ocean's Embrace</title>
+    <!-- 引入 Font Awesome 图标库 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #495059;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 磁带图片，调整为更大的尺寸 */
+        .icon {
+            width: 80%;  /* 放大磁带图片 */
+            max-width: 900px;  /* 设置最大宽度 */
+            height: auto;
+            transform: rotate(0deg); /* 保持正确方向 */
+            margin-bottom: 30px; /* 磁带图片和下方图片之间增加间隔 */
+        }
+
+        /* 文字图片 */
+        .text-image {
+            width: 50%; /* 比磁带小 */
+            max-width: 400px; /* 限制最大宽度 */
+            height: auto;
+            margin-top: 60px; /* 增加图片与按钮之间的间隔 */
+        }
+
+        /* 音频控制按钮 */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px; /* 增加按钮间隔 */
+            margin-top: 80px; /* 增加按钮与图片之间的间距 */
+        }
+
+        .button {
+            background: #E4E1D8;
+            border-radius: 50%;
+            padding: 20px;
+            cursor: pointer;
+            font-size: 24px;
+            transition: background-color 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button:hover {
+            background-color: #D9D9D9;
+        }
+
+        .fas {
+            font-size: 36px; /* 图标大小 */
+            color: #495059;
+        }
+
+        /* 进度条 */
+        .progress-bar {
+            position: relative;
+            width: 80%;
+            height: 8px;
+            background-color: #D9D9D9;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .progress-bar-inner {
+            width: 0%;
+            height: 100%;
+            background-color: #E4E1D8;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 第一张磁带图片 -->
+        <img src="CassetteImage3.png" alt="Cassette Image" class="icon" />
+        
+        <!-- 第二张带有文本的图片 -->
+        <img src="words3.png" alt="Text Image" class="text-image" />
+
+        <!-- 音频控制按钮 -->
+        <div class="button-container">
+            <!-- 播放按钮 -->
+            <div class="button" onclick="playMusic()">
+                <i class="fas fa-play"></i> <!-- Font Awesome 播放图标 -->
+            </div>
+            <!-- 停止按钮 -->
+            <div class="button" onclick="stopMusic()">
+                <i class="fas fa-stop"></i> <!-- Font Awesome 停止图标 -->
+            </div>
+            <!-- 暂停按钮 -->
+            <div class="button" onclick="pauseMusic()">
+                <i class="fas fa-pause"></i> <!-- Font Awesome 暂停图标 -->
+            </div>
+        </div>
+
+        <!-- 进度条 -->
+        <div class="progress-bar" onclick="setProgress(event)">
+            <div class="progress-bar-inner" id="progressBar"></div>
+        </div>
+
+        <!-- 音频播放器 -->
+        <audio id="audioPlayer" src="generated_audio_20250327_175816.mp3"></audio>
+    </div>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const progressBar = document.getElementById('progressBar');
+
+        // 播放音乐
+        function playMusic() {
+            audioPlayer.play();
+            updateProgressBar();
+        }
+
+        // 暂停音乐
+        function pauseMusic() {
+            audioPlayer.pause();
+        }
+
+        // 停止音乐
+        function stopMusic() {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            progressBar.style.width = '0%';  // Reset progress bar
+        }
+
+        // 更新进度条
+        function updateProgressBar() {
+            setInterval(() => {
+                const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressBar.style.width = progress + '%';
+            }, 1000);
+        }
+
+        // 点击进度条跳转到音频的某个位置
+        function setProgress(event) {
+            const barWidth = event.currentTarget.offsetWidth;
+            const clickPosition = event.offsetX; // 点击位置
+            const duration = audioPlayer.duration;
+            const newTime = (clickPosition / barWidth) * duration;
+            audioPlayer.currentTime = newTime;
+        }
+    </script>
+</body>
+</html>
